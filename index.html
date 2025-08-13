@@ -23,6 +23,48 @@
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Pita Bendera Indonesia */
+        .flag-ribbon {
+            position: fixed;
+            top: 0;
+            width: 100px;
+            height: 100px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .flag-ribbon.left {
+            left: 0;
+        }
+        
+        .flag-ribbon.right {
+            right: 0;
+            transform: scaleX(-1);
+        }
+        
+        .flag-ribbon::before {
+            content: "";
+            position: absolute;
+            top: -15px;
+            width: 150%;
+            height: 40px;
+            background: #ce1126;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .flag-ribbon::after {
+            content: "";
+            position: absolute;
+            top: 25px;
+            width: 150%;
+            height: 40px;
+            background: #fff;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }
         
         .container {
@@ -34,12 +76,15 @@
             overflow: hidden;
             padding: 30px;
             margin: 20px;
+            position: relative;
+            z-index: 10;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
+            padding: 0 10px;
         }
         
         .header h1 {
@@ -47,13 +92,13 @@
             color: #c62828;
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.2);
             letter-spacing: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .header h2 {
             font-size: 2.2rem;
             color: #2e7d32;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
         
@@ -61,7 +106,7 @@
             font-size: 1.8rem;
             color: #1565c0;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .header::after {
@@ -70,7 +115,7 @@
             height: 5px;
             background: linear-gradient(to right, #FF0000, #FFFFFF, #0000FF);
             border-radius: 10px;
-            margin: 15px auto;
+            margin: 12px auto;
             width: 80%;
         }
         
@@ -78,12 +123,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 30px;
+            gap: 25px;
         }
         
         .nik-display {
             width: 90%;
-            height: 300px;
+            height: 350px;
             background: linear-gradient(45deg, #1e3c72, #2a5298);
             border-radius: 20px;
             display: flex;
@@ -93,6 +138,8 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            z-index: 20;
+            padding: 20px;
         }
         
         .nik-display::before {
@@ -107,25 +154,30 @@
         }
         
         .nik-number {
-            font-size: 8rem;
+            font-size: 9rem;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
             letter-spacing: 15px;
             animation: glow 1.5s ease-in-out infinite alternate;
+            z-index: 30;
+            margin-bottom: 15px;
         }
         
         .nik-name {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: #FFD700;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
             text-align: center;
             padding: 0 20px;
             max-width: 90%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            z-index: 30;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 30px;
+            border-radius: 15px;
         }
         
         @keyframes glow {
@@ -142,6 +194,7 @@
             gap: 20px;
             margin-top: 10px;
             justify-content: center;
+            z-index: 20;
         }
         
         .btn {
@@ -156,6 +209,7 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 20;
         }
         
         .btn-start {
@@ -173,21 +227,22 @@
             width: 90%;
             background: #f5f5f5;
             border-radius: 15px;
-            padding: 25px;
+            padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
+            z-index: 20;
         }
         
         .upload-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .upload-area {
             border: 3px dashed #4caf50;
             border-radius: 10px;
-            padding: 15px;
+            padding: 12px;
             cursor: pointer;
             transition: all 0.3s;
             background: rgba(76, 175, 80, 0.05);
@@ -197,7 +252,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100px;
+            min-height: 80px;
+            z-index: 20;
         }
         
         .upload-area:hover {
@@ -206,13 +262,13 @@
         }
         
         .upload-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #4caf50;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .upload-text {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #666;
             text-align: center;
         }
@@ -223,10 +279,10 @@
         
         .progress-container {
             width: 100%;
-            height: 20px;
+            height: 15px;
             background: #e0e0e0;
             border-radius: 10px;
-            margin-top: 20px;
+            margin-top: 15px;
             overflow: hidden;
             display: none;
         }
@@ -241,42 +297,62 @@
         
         .winners-section {
             width: 90%;
-            margin-top: 30px;
+            margin-top: 20px;
             background: #f5f5f5;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 20;
         }
         
         .winners-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
             gap: 15px;
         }
         
         .winners-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: #333;
+        }
+        
+        .winners-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .participant-count {
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .winners-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .btn-export {
             background: linear-gradient(to right, #2196F3, #0D47A1);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
         }
         
         .btn-clear {
             background: linear-gradient(to right, #ff9800, #f57c00);
             color: white;
-            padding: 10px 20px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
         }
         
         .winners-table {
@@ -290,8 +366,9 @@
         .winners-table th {
             background: linear-gradient(to right, #1a237e, #283593);
             color: white;
-            padding: 15px;
+            padding: 12px 15px;
             text-align: left;
+            font-size: 0.95rem;
         }
         
         .winners-table tr:nth-child(even) {
@@ -303,8 +380,9 @@
         }
         
         .winners-table td {
-            padding: 12px 15px;
+            padding: 10px 12px;
             border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
         }
         
         .winners-table tr:last-child td {
@@ -313,11 +391,22 @@
         
         .footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
             color: #666;
-            font-size: 1rem;
-            padding-top: 20px;
+            font-size: 0.9rem;
+            padding-top: 15px;
             border-top: 1px solid #ddd;
+            z-index: 20;
+        }
+        
+        .prize-info {
+            background: linear-gradient(to right, #ff9800, #f57c00);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: inline-block;
+            font-weight: bold;
         }
         
         @media (max-width: 768px) {
@@ -334,12 +423,12 @@
             }
             
             .nik-number {
-                font-size: 5rem;
+                font-size: 6rem;
                 letter-spacing: 10px;
             }
             
             .nik-name {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
             
             .btn {
@@ -352,9 +441,19 @@
                 align-items: stretch;
             }
             
+            .winners-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
             .winners-actions {
                 width: 100%;
                 justify-content: flex-end;
+            }
+            
+            .flag-ribbon {
+                width: 80px;
+                height: 80px;
             }
         }
         
@@ -365,15 +464,26 @@
             
             .header h1 {
                 font-size: 2rem;
+                margin-bottom: 3px;
+            }
+            
+            .header h2 {
+                font-size: 1.5rem;
+                margin-bottom: 5px;
+            }
+            
+            .header h3 {
+                font-size: 1.2rem;
+                margin-bottom: 3px;
             }
             
             .nik-number {
-                font-size: 3.5rem;
+                font-size: 4rem;
                 letter-spacing: 5px;
             }
             
             .nik-name {
-                font-size: 1.4rem;
+                font-size: 1.5rem;
             }
             
             .controls {
@@ -387,7 +497,7 @@
             }
             
             .upload-area {
-                min-height: 80px;
+                min-height: 70px;
                 padding: 10px;
             }
             
@@ -396,26 +506,84 @@
             }
             
             .upload-text {
-                font-size: 0.9rem;
+                font-size: 0.8rem;
             }
+            
+            .flag-ribbon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .winners-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+        
+        /* Efek bunga-bunga jatuh (confetti) */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
         }
         
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 15px;
+            height: 15px;
             background-color: #f00;
             animation: fall linear forwards;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255,255,255,0.7);
         }
         
         @keyframes fall {
             to {
-                transform: translateY(100vh);
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        /* Audio control tersembunyi */
+        #applause-sound {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Efek kembang api */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: explode 1s forwards;
+            z-index: 50;
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(2);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Pita Bendera Indonesia -->
+    <div class="flag-ribbon left"></div>
+    <div class="flag-ribbon right"></div>
+    
+    <div class="confetti-container" id="confetti-container"></div>
+    
     <div class="container">
         <div class="header">
             <h1>UNDIAN DOORPRIZE</h1>
@@ -427,6 +595,7 @@
             <div class="nik-display">
                 <div class="nik-number">000000</div>
                 <div class="nik-name">Nama Karyawan</div>
+                <div class="prize-info" id="prize-info">Hadiah: -</div>
             </div>
             
             <div class="controls">
@@ -439,13 +608,14 @@
             </div>
             
             <div class="upload-section">
-                <h3 class="upload-title">Upload Data Karyawan</h3>
+                <h3 class="upload-title">Upload Data Karyawan & Hadiah</h3>
                 <div class="upload-area" id="upload-area">
                     <div class="upload-icon">
                         <i class="fas fa-file-excel"></i>
                     </div>
                     <div class="upload-text">
-                        Klik untuk mengunggah file Excel (Kolom A: NIK, Kolom B: Nama)
+                        Klik untuk mengunggah file Excel<br>
+                        (Kolom A: NIK, Kolom B: Nama, Kolom C: Jenis Hadiah)
                     </div>
                     <input type="file" id="file-input" accept=".xlsx, .xls">
                 </div>
@@ -457,13 +627,18 @@
             <div class="winners-section">
                 <div class="winners-header">
                     <h3 class="winners-title">Daftar Pemenang</h3>
-                    <div class="winners-actions">
-                        <button class="btn btn-export" id="export-btn">
-                            <i class="fas fa-file-excel"></i> Export
-                        </button>
-                        <button class="btn btn-clear" id="clear-btn">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
+                    <div class="winners-info">
+                        <div class="participant-count" id="participant-count">
+                            <i class="fas fa-users"></i> Peserta: 0
+                        </div>
+                        <div class="winners-actions">
+                            <button class="btn btn-export" id="export-btn">
+                                <i class="fas fa-file-excel"></i> Export
+                            </button>
+                            <button class="btn btn-clear" id="clear-btn">
+                                <i class="fas fa-trash"></i> Hapus
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <table class="winners-table">
@@ -472,11 +647,12 @@
                             <th>No</th>
                             <th>NIK</th>
                             <th>Nama</th>
+                            <th>Jenis Hadiah</th>
                         </tr>
                     </thead>
                     <tbody id="winners-list">
                         <tr>
-                            <td colspan="3" style="text-align: center;">Belum ada pemenang</td>
+                            <td colspan="4" style="text-align: center;">Belum ada pemenang</td>
                         </tr>
                     </tbody>
                 </table>
@@ -484,17 +660,41 @@
         </div>
         
         <div class="footer">
-            <p>Aplikasi Undian Doorprize © 2025 PT. GWI - Semarak Kemerdekaan 80 Tahun</p>
+            <p>SBTP-FSBI ©2025</p>
         </div>
     </div>
 
+    <!-- Audio untuk efek tepuk tangan -->
+    <audio id="applause-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-audience-clapping-loudly-438.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        // Data karyawan dan pemenang
-        let employees = [];
-        let winners = JSON.parse(localStorage.getItem('doorprizeWinners')) || [];
-        let isRunning = false;
-        let drawInterval;
-        
+        // Data aplikasi yang akan disimpan
+        const appState = {
+            employees: [],
+            prizes: [],
+            winners: [],
+            isRunning: false,
+            currentPrizeIndex: 0
+        };
+
+        // Memuat state dari localStorage
+        function loadAppState() {
+            const savedState = localStorage.getItem('doorprizeAppState');
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                Object.assign(appState, parsedState);
+                console.log("State aplikasi berhasil dimuat:", appState);
+            }
+        }
+
+        // Menyimpan state ke localStorage
+        function saveAppState() {
+            localStorage.setItem('doorprizeAppState', JSON.stringify(appState));
+            console.log("State aplikasi berhasil disimpan:", appState);
+        }
+
         // DOM Elements
         const uploadArea = document.getElementById('upload-area');
         const fileInput = document.getElementById('file-input');
@@ -506,7 +706,11 @@
         const clearBtn = document.getElementById('clear-btn');
         const nikNumber = document.querySelector('.nik-number');
         const nikName = document.querySelector('.nik-name');
+        const prizeInfo = document.getElementById('prize-info');
         const winnersList = document.getElementById('winners-list');
+        const confettiContainer = document.getElementById('confetti-container');
+        const applauseSound = document.getElementById('applause-sound');
+        const participantCount = document.getElementById('participant-count');
         
         // Event listeners
         uploadArea.addEventListener('click', function() {
@@ -520,7 +724,27 @@
         clearBtn.addEventListener('click', clearWinners);
         
         // Initialize
-        updateWinnersList();
+        initializeApp();
+        
+        // Inisialisasi aplikasi
+        function initializeApp() {
+            // Memuat state dari localStorage
+            loadAppState();
+            
+            // Memulihkan tampilan berdasarkan state
+            updateParticipantCount();
+            updateWinnersList();
+            updateNextPrizeInfo();
+            
+            // Memulihkan status tombol
+            if (appState.isRunning) {
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'flex';
+                startDraw();
+            }
+            
+            console.log("Aplikasi diinisialisasi dengan state:", appState);
+        }
         
         // File upload handler
         function handleFileUpload(e) {
@@ -541,15 +765,18 @@
                     // Get first worksheet
                     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                     
-                    // Convert to JSON
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: ['nik', 'name']});
+                    // Convert to JSON - kolom A: NIK, B: Nama, C: Jenis Hadiah
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: ['nik', 'name', 'prize']});
                     
                     // Remove header row if exists
                     if (jsonData.length > 0 && isNaN(jsonData[0].nik)) {
                         jsonData.shift();
                     }
                     
-                    employees = jsonData;
+                    // Update state
+                    appState.employees = jsonData;
+                    appState.prizes = jsonData.map(item => item.prize || "Hadiah Khusus");
+                    appState.currentPrizeIndex = appState.winners.length;
                     
                     // Update progress bar
                     progressBar.style.width = '100%';
@@ -557,7 +784,14 @@
                     setTimeout(() => {
                         progressContainer.style.display = 'none';
                         progressBar.style.width = '0%';
-                        alert(`Sukses! ${employees.length} data karyawan telah dimuat.`);
+                        alert(`Sukses! ${appState.employees.length} data karyawan dan hadiah telah dimuat.`);
+                        
+                        // Perbarui tampilan
+                        updateParticipantCount();
+                        updateNextPrizeInfo();
+                        
+                        // Simpan state
+                        saveAppState();
                     }, 500);
                     
                 } catch (error) {
@@ -577,23 +811,35 @@
             reader.readAsArrayBuffer(file);
         }
         
+        // Update info hadiah berikutnya
+        function updateNextPrizeInfo() {
+            if (appState.prizes.length > appState.currentPrizeIndex) {
+                prizeInfo.textContent = `Hadiah Berikutnya: ${appState.prizes[appState.currentPrizeIndex]}`;
+            } else {
+                prizeInfo.textContent = "Hadiah Berikutnya: -";
+            }
+        }
+        
         // Start the draw (3x faster)
         function startDraw() {
-            if (employees.length === 0) {
+            if (appState.employees.length === 0) {
                 alert('Silakan upload data karyawan terlebih dahulu!');
                 return;
             }
             
-            if (isRunning) return;
+            if (appState.isRunning) return;
             
-            isRunning = true;
+            appState.isRunning = true;
             startBtn.style.display = 'none';
             stopBtn.style.display = 'flex';
             
+            // Simpan state
+            saveAppState();
+            
             // Start animation (3x faster - interval 17ms ~ 60fps)
             drawInterval = setInterval(() => {
-                const randomIndex = Math.floor(Math.random() * employees.length);
-                const employee = employees[randomIndex];
+                const randomIndex = Math.floor(Math.random() * appState.employees.length);
+                const employee = appState.employees[randomIndex];
                 
                 nikNumber.textContent = employee.nik.toString().padStart(6, '0');
                 nikName.textContent = employee.name;
@@ -602,39 +848,58 @@
         
         // Stop the draw and pick winner
         function stopDraw() {
-            if (!isRunning) return;
+            if (!appState.isRunning) return;
             
             clearInterval(drawInterval);
-            isRunning = false;
+            appState.isRunning = false;
             stopBtn.style.display = 'none';
             startBtn.style.display = 'flex';
             
             // Get final employee
-            const randomIndex = Math.floor(Math.random() * employees.length);
-            const winner = employees[randomIndex];
+            const randomIndex = Math.floor(Math.random() * appState.employees.length);
+            const winner = appState.employees[randomIndex];
             
             nikNumber.textContent = winner.nik.toString().padStart(6, '0');
             nikName.textContent = winner.name;
             
-            // Add to winners list
-            winners.push(winner);
-            saveWinners();
+            // Dapatkan hadiah dari urutan berikutnya
+            const prize = appState.prizes.length > appState.currentPrizeIndex ? 
+                          appState.prizes[appState.currentPrizeIndex] : "Hadiah Khusus";
+            
+            // Tambahkan pemenang ke daftar
+            const winnerData = {
+                nik: winner.nik,
+                name: winner.name,
+                prize: prize
+            };
+            
+            appState.winners.push(winnerData);
+            appState.currentPrizeIndex++;
+            
+            // Perbarui tampilan
             updateWinnersList();
+            updateNextPrizeInfo();
+            
+            // Simpan state
+            saveAppState();
             
             // Create confetti effect
             createConfetti();
+            
+            // Mainkan suara tepuk tangan
+            playApplause();
         }
         
         // Update winners list table
         function updateWinnersList() {
             winnersList.innerHTML = '';
             
-            if (winners.length === 0) {
-                winnersList.innerHTML = '<tr><td colspan="3" style="text-align: center;">Belum ada pemenang</td></tr>';
+            if (appState.winners.length === 0) {
+                winnersList.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada pemenang</td></tr>';
                 return;
             }
             
-            winners.forEach((winner, index) => {
+            appState.winners.forEach((winner, index) => {
                 const row = document.createElement('tr');
                 
                 const noCell = document.createElement('td');
@@ -646,31 +911,41 @@
                 const nameCell = document.createElement('td');
                 nameCell.textContent = winner.name;
                 
+                const prizeCell = document.createElement('td');
+                prizeCell.textContent = winner.prize;
+                
                 row.appendChild(noCell);
                 row.appendChild(nikCell);
                 row.appendChild(nameCell);
+                row.appendChild(prizeCell);
                 
                 winnersList.appendChild(row);
             });
         }
         
-        // Save winners to localStorage
-        function saveWinners() {
-            localStorage.setItem('doorprizeWinners', JSON.stringify(winners));
+        // Update participant count
+        function updateParticipantCount() {
+            participantCount.innerHTML = `<i class="fas fa-users"></i> Peserta: ${appState.employees.length}`;
         }
         
         // Clear winners list
         function clearWinners() {
             if (confirm('Apakah Anda yakin ingin menghapus semua data pemenang?')) {
-                winners = [];
-                saveWinners();
+                appState.winners = [];
+                appState.currentPrizeIndex = 0;
+                
+                // Perbarui tampilan
                 updateWinnersList();
+                updateNextPrizeInfo();
+                
+                // Simpan state
+                saveAppState();
             }
         }
         
         // Export winners to Excel
         function exportWinnersToExcel() {
-            if (winners.length === 0) {
+            if (appState.winners.length === 0) {
                 alert('Belum ada pemenang untuk di-export!');
                 return;
             }
@@ -678,11 +953,12 @@
             try {
                 // Prepare worksheet
                 const wsData = [
-                    ['No', 'NIK', 'Nama'],
-                    ...winners.map((winner, index) => [
+                    ['No', 'NIK', 'Nama', 'Jenis Hadiah'],
+                    ...appState.winners.map((winner, index) => [
                         index + 1,
                         winner.nik.toString().padStart(6, '0'),
-                        winner.name
+                        winner.name,
+                        winner.prize
                     ])
                 ];
                 
@@ -692,10 +968,12 @@
                 if (!ws['A1']) ws['A1'] = {};
                 if (!ws['B1']) ws['B1'] = {};
                 if (!ws['C1']) ws['C1'] = {};
+                if (!ws['D1']) ws['D1'] = {};
                 
                 ws['A1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
                 ws['B1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
                 ws['C1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
+                ws['D1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
                 
                 // Create workbook
                 const wb = XLSX.utils.book_new();
@@ -717,36 +995,87 @@
         
         // Create confetti effect
         function createConfetti() {
-            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-            const container = document.querySelector('.container');
+            // Hapus confetti sebelumnya
+            confettiContainer.innerHTML = '';
             
-            for (let i = 0; i < 150; i++) {
+            // Warna-warni confetti
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#00ccff'];
+            
+            // Buat 250 confetti
+            for (let i = 0; i < 250; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 
-                // Random position
+                // Posisi acak di bagian atas layar
                 const posX = Math.random() * window.innerWidth;
                 confetti.style.left = `${posX}px`;
                 
-                // Random color
+                // Warna acak
                 const colorIndex = Math.floor(Math.random() * colors.length);
                 confetti.style.backgroundColor = colors[colorIndex];
                 
-                // Random size
+                // Ukuran acak
                 const size = Math.random() * 10 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
                 
-                // Random animation duration
+                // Durasi animasi acak
                 const duration = Math.random() * 3 + 2;
                 confetti.style.animation = `fall ${duration}s linear forwards`;
                 
-                container.appendChild(confetti);
+                // Tambahkan confetti ke container
+                confettiContainer.appendChild(confetti);
                 
-                // Remove confetti after animation completes
+                // Hapus confetti setelah animasi selesai
                 setTimeout(() => {
-                    confetti.remove();
+                    if (confetti.parentNode) {
+                        confetti.remove();
+                    }
                 }, duration * 1000);
+            }
+            
+            // Tambahkan efek kembang api
+            createFireworks();
+        }
+        
+        // Create fireworks effect
+        function createFireworks() {
+            // Buat 10 efek kembang api
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    
+                    // Posisi acak di sekitar area NIK
+                    const posX = Math.random() * window.innerWidth;
+                    firework.style.left = `${posX}px`;
+                    firework.style.top = `${window.innerHeight * 0.3}px`;
+                    
+                    // Warna acak
+                    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+                    const colorIndex = Math.floor(Math.random() * colors.length);
+                    firework.style.backgroundColor = colors[colorIndex];
+                    
+                    // Tambahkan ke container
+                    confettiContainer.appendChild(firework);
+                    
+                    // Hapus setelah animasi selesai
+                    setTimeout(() => {
+                        if (firework.parentNode) {
+                            firework.remove();
+                        }
+                    }, 1000);
+                }, i * 200);
+            }
+        }
+        
+        // Play applause sound
+        function playApplause() {
+            try {
+                applauseSound.currentTime = 0; // Reset audio ke awal
+                applauseSound.play();
+            } catch (e) {
+                console.log("Gagal memainkan suara tepuk tangan:", e);
             }
         }
     </script>
