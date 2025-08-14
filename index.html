@@ -69,7 +69,7 @@
         
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px; /* Lebih lebar untuk layar besar */
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
@@ -164,20 +164,28 @@
             margin-bottom: 15px;
         }
         
+        /* PERBAIKAN UTAMA: Tampilan nama karyawan untuk semua ukuran layar */
         .nik-name {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             color: #FFD700;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
             text-align: center;
             padding: 0 20px;
-            max-width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            max-width: 95%;
             z-index: 30;
             background: rgba(0,0,0,0.3);
             padding: 10px 30px;
             border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            line-height: 1.3;
+            white-space: normal;
+            text-overflow: unset;
+            overflow: auto;
         }
         
         @keyframes glow {
@@ -407,6 +415,37 @@
             margin-top: 10px;
             display: inline-block;
             font-weight: bold;
+            text-align: center;
+            max-width: 90%;
+        }
+        
+        /* TAMBAHAN: Scrollbar untuk nama panjang */
+        .nik-name::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        .nik-name::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        
+        .nik-name::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+        
+        /* Responsivitas untuk layar sangat lebar */
+        @media (min-width: 1600px) {
+            .container {
+                max-width: 1600px;
+            }
+            
+            .nik-name {
+                font-size: 2.5rem;
+                max-height: 150px;
+                overflow-y: auto;
+            }
         }
         
         @media (max-width: 768px) {
@@ -428,7 +467,7 @@
             }
             
             .nik-name {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
             
             .btn {
@@ -483,7 +522,8 @@
             }
             
             .nik-name {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                padding: 8px 15px;
             }
             
             .controls {
@@ -615,7 +655,7 @@
                     </div>
                     <div class="upload-text">
                         Klik untuk mengunggah file Excel<br>
-                        (Kolom A: NIK, Kolom B: Nama, Kolom C: Jenis Hadiah)
+                        (Kolom A: NIK, Kolom B: Nama, Kolom C: Mendapat hadiah)
                     </div>
                     <input type="file" id="file-input" accept=".xlsx, .xls">
                 </div>
@@ -636,7 +676,7 @@
                                 <i class="fas fa-file-excel"></i> Export
                             </button>
                             <button class="btn btn-clear" id="clear-btn">
-                                <i class="fas fa-trash"></i> Hapus
+                                <i class="fas fa-trash"></i> Hapus Semua
                             </button>
                         </div>
                     </div>
@@ -647,7 +687,7 @@
                             <th>No</th>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Jenis Hadiah</th>
+                            <th>Mendapat hadiah</th>
                         </tr>
                     </thead>
                     <tbody id="winners-list">
@@ -721,7 +761,7 @@
         startBtn.addEventListener('click', startDraw);
         stopBtn.addEventListener('click', stopDraw);
         exportBtn.addEventListener('click', exportWinnersToExcel);
-        clearBtn.addEventListener('click', clearWinners);
+        clearBtn.addEventListener('click', clearAllData);
         
         // Initialize
         initializeApp();
@@ -765,7 +805,7 @@
                     // Get first worksheet
                     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                     
-                    // Convert to JSON - kolom A: NIK, B: Nama, C: Jenis Hadiah
+                    // Convert to JSON - kolom A: NIK, B: Nama, C: Mendapat hadiah
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: ['nik', 'name', 'prize']});
                     
                     // Remove header row if exists
@@ -928,18 +968,37 @@
             participantCount.innerHTML = `<i class="fas fa-users"></i> Peserta: ${appState.employees.length}`;
         }
         
-        // Clear winners list
-        function clearWinners() {
-            if (confirm('Apakah Anda yakin ingin menghapus semua data pemenang?')) {
+        // Fungsi untuk menghapus semua data
+        function clearAllData() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA DATA? Data pemenang dan data karyawan yang diunggah akan direset.')) {
+                // Hentikan interval jika sedang berjalan
+                if (appState.isRunning) {
+                    clearInterval(drawInterval);
+                    appState.isRunning = false;
+                    stopBtn.style.display = 'none';
+                    startBtn.style.display = 'flex';
+                }
+                
+                // Reset state aplikasi
+                appState.employees = [];
+                appState.prizes = [];
                 appState.winners = [];
                 appState.currentPrizeIndex = 0;
                 
-                // Perbarui tampilan
-                updateWinnersList();
-                updateNextPrizeInfo();
+                // Reset tampilan
+                nikNumber.textContent = '000000';
+                nikName.textContent = 'Nama Karyawan';
+                prizeInfo.textContent = 'Hadiah: -';
+                participantCount.innerHTML = '<i class="fas fa-users"></i> Peserta: 0';
+                winnersList.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada pemenang</td></tr>';
                 
-                // Simpan state
+                // Reset file input
+                fileInput.value = '';
+                
+                // Simpan state kosong
                 saveAppState();
+                
+                alert('Semua data telah dihapus!');
             }
         }
         
@@ -953,7 +1012,7 @@
             try {
                 // Prepare worksheet
                 const wsData = [
-                    ['No', 'NIK', 'Nama', 'Jenis Hadiah'],
+                    ['No', 'NIK', 'Nama', 'Mendapat hadiah'],
                     ...appState.winners.map((winner, index) => [
                         index + 1,
                         winner.nik.toString().padStart(6, '0'),
