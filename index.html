@@ -87,6 +87,7 @@
             padding: 0 10px;
         }
         
+        /* PERUBAHAN: Judul disusun berurutan ke bawah */
         .header h1 {
             font-size: 3.5rem;
             color: #c62828;
@@ -140,6 +141,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             z-index: 20;
             padding: 20px;
+            transition: all 0.5s ease;
         }
         
         .nik-display::before {
@@ -162,9 +164,9 @@
             animation: glow 1.5s ease-in-out infinite alternate;
             z-index: 30;
             margin-bottom: 15px;
+            transition: transform 0.3s;
         }
         
-        /* PERBAIKAN UTAMA: Tampilan nama karyawan untuk semua ukuran layar */
         .nik-name {
             font-size: 2.2rem;
             color: #FFD700;
@@ -186,6 +188,7 @@
             white-space: normal;
             text-overflow: unset;
             overflow: auto;
+            transition: transform 0.3s;
         }
         
         @keyframes glow {
@@ -195,6 +198,101 @@
             to {
                 text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6;
             }
+        }
+        
+        /* Animasi BUM BUM DUAR */
+        @keyframes explosion {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 rgba(255, 215, 0, 0);
+            }
+            20% {
+                transform: scale(0.95);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
+            40% {
+                transform: scale(1.05);
+                box-shadow: 0 0 40px rgba(255, 0, 0, 0.7);
+            }
+            60% {
+                transform: scale(1.1);
+                box-shadow: 0 0 60px rgba(255, 165, 0, 0.8);
+            }
+            80% {
+                transform: scale(1.15);
+                box-shadow: 0 0 80px rgba(255, 255, 0, 0.9);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 100px rgba(255, 215, 0, 1);
+            }
+        }
+        
+        @keyframes nikExplosion {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+            }
+            20% {
+                transform: scale(1.3) rotate(-5deg);
+                text-shadow: 0 0 20px #ff0000;
+            }
+            40% {
+                transform: scale(1.5) rotate(5deg);
+                text-shadow: 0 0 30px #ff9900;
+            }
+            60% {
+                transform: scale(1.7) rotate(-3deg);
+                text-shadow: 0 0 40px #ffff00;
+            }
+            80% {
+                transform: scale(1.5) rotate(3deg);
+                text-shadow: 0 0 30px #00ff00;
+            }
+            100% {
+                transform: scale(1.2) rotate(0);
+                text-shadow: 0 0 20px #00ffff;
+            }
+        }
+        
+        @keyframes nameExplosion {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 0 rgba(255, 215, 0, 0);
+            }
+            20% {
+                transform: scale(1.2) rotate(-3deg);
+                text-shadow: 0 0 15px #ff0000;
+            }
+            40% {
+                transform: scale(1.4) rotate(3deg);
+                text-shadow: 0 0 25px #ff9900;
+            }
+            60% {
+                transform: scale(1.6) rotate(-2deg);
+                text-shadow: 0 0 35px #ffff00;
+            }
+            80% {
+                transform: scale(1.4) rotate(2deg);
+                text-shadow: 0 0 25px #00ff00;
+            }
+            100% {
+                transform: scale(1.1) rotate(0);
+                text-shadow: 0 0 15px #00ffff;
+            }
+        }
+        
+        /* PERUBAHAN: Animasi menjadi 2.5 detik */
+        .explosion-effect {
+            animation: explosion 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+        
+        .nik-explosion {
+            animation: nikExplosion 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+        
+        .name-explosion {
+            animation: nameExplosion 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
         
         .controls {
@@ -615,6 +713,16 @@
                 opacity: 0;
             }
         }
+        
+        /* Particle effects for explosion */
+        .explosion-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 150;
+        }
     </style>
 </head>
 <body>
@@ -632,9 +740,9 @@
         </div>
         
         <div class="main-content">
-            <div class="nik-display">
-                <div class="nik-number">000000</div>
-                <div class="nik-name">Nama Karyawan</div>
+            <div class="nik-display" id="nik-display">
+                <div class="nik-number" id="nik-number">000000</div>
+                <div class="nik-name" id="nik-name">Nama Karyawan</div>
                 <div class="prize-info" id="prize-info">Hadiah: -</div>
             </div>
             
@@ -655,7 +763,7 @@
                     </div>
                     <div class="upload-text">
                         Klik untuk mengunggah file Excel<br>
-                        (Kolom A: NIK, Kolom B: Nama, Kolom C: Mendapat hadiah)
+                        (Kolom A: NIK, Kolom B: Nama, Kolom C: Jenis Hadiah)
                     </div>
                     <input type="file" id="file-input" accept=".xlsx, .xls">
                 </div>
@@ -687,7 +795,7 @@
                             <th>No</th>
                             <th>NIK</th>
                             <th>Nama</th>
-                            <th>Mendapat hadiah</th>
+                            <th>Jenis Hadiah</th>
                         </tr>
                     </thead>
                     <tbody id="winners-list">
@@ -704,9 +812,12 @@
         </div>
     </div>
 
-    <!-- Audio untuk efek tepuk tangan -->
+    <!-- Audio untuk efek tepuk tangan dan ledakan -->
     <audio id="applause-sound" preload="auto">
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-audience-clapping-loudly-438.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="explosion-sound" preload="auto">
+        <source src="https://assets.mixkit.co/sfx/preview/mixkit-explosion-hit-759.mp3" type="audio/mpeg">
     </audio>
 
     <script>
@@ -744,12 +855,14 @@
         const stopBtn = document.getElementById('stop-btn');
         const exportBtn = document.getElementById('export-btn');
         const clearBtn = document.getElementById('clear-btn');
-        const nikNumber = document.querySelector('.nik-number');
-        const nikName = document.querySelector('.nik-name');
+        const nikNumber = document.getElementById('nik-number');
+        const nikName = document.getElementById('nik-name');
+        const nikDisplay = document.getElementById('nik-display');
         const prizeInfo = document.getElementById('prize-info');
         const winnersList = document.getElementById('winners-list');
         const confettiContainer = document.getElementById('confetti-container');
         const applauseSound = document.getElementById('applause-sound');
+        const explosionSound = document.getElementById('explosion-sound');
         const participantCount = document.getElementById('participant-count');
         
         // Event listeners
@@ -805,7 +918,7 @@
                     // Get first worksheet
                     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                     
-                    // Convert to JSON - kolom A: NIK, B: Nama, C: Mendapat hadiah
+                    // Convert to JSON - kolom A: NIK, B: Nama, C: Jenis Hadiah
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: ['nik', 'name', 'prize']});
                     
                     // Remove header row if exists
@@ -926,8 +1039,128 @@
             // Create confetti effect
             createConfetti();
             
-            // Mainkan suara tepuk tangan
+            // Create explosion effect
+            createExplosionEffect();
+            
+            // Mainkan suara tepuk tangan dan ledakan
             playApplause();
+            playExplosionSound();
+        }
+        
+        // Create explosion effect
+        function createExplosionEffect() {
+            // Hapus efek sebelumnya
+            nikDisplay.classList.remove('explosion-effect');
+            nikNumber.classList.remove('nik-explosion');
+            nikName.classList.remove('name-explosion');
+            
+            // Paksa reflow untuk memastikan animasi dimulai ulang
+            void nikDisplay.offsetWidth;
+            void nikNumber.offsetWidth;
+            void nikName.offsetWidth;
+            
+            // Tambahkan efek ledakan
+            nikDisplay.classList.add('explosion-effect');
+            nikNumber.classList.add('nik-explosion');
+            nikName.classList.add('name-explosion');
+            
+            // Tambahkan partikel ledakan
+            createExplosionParticles();
+            
+            // Hapus kelas animasi setelah selesai
+            // PERUBAHAN: Animasi menjadi 2.5 detik (2500ms)
+            setTimeout(() => {
+                nikDisplay.classList.remove('explosion-effect');
+                nikNumber.classList.remove('nik-explosion');
+                nikName.classList.remove('name-explosion');
+            }, 2500);
+        }
+        
+        // Create explosion particles
+        function createExplosionParticles() {
+            const colors = ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#ff00ff'];
+            
+            // Dapatkan posisi dan dimensi kotak NIK
+            const displayRect = nikDisplay.getBoundingClientRect();
+            const centerX = displayRect.left + displayRect.width / 2;
+            const centerY = displayRect.top + displayRect.height / 2;
+            
+            // Buat 100 partikel ledakan
+            for (let i = 0; i < 100; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'explosion-particle';
+                
+                // Warna acak
+                const colorIndex = Math.floor(Math.random() * colors.length);
+                particle.style.backgroundColor = colors[colorIndex];
+                
+                // Ukuran acak
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posisi awal di tengah kotak NIK
+                particle.style.left = `${centerX}px`;
+                particle.style.top = `${centerY}px`;
+                
+                // Animasi partikel
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 200 + 100;
+                const duration = Math.random() * 1 + 0.5;
+                
+                particle.style.animation = `
+                    particle-move ${duration}s ease-out forwards,
+                    particle-fade ${duration}s ease-out forwards
+                `;
+                
+                particle.style.setProperty('--end-x', `${centerX + Math.cos(angle) * distance}px`);
+                particle.style.setProperty('--end-y', `${centerY + Math.sin(angle) * distance}px`);
+                
+                document.body.appendChild(particle);
+                
+                // Hapus partikel setelah animasi selesai
+                setTimeout(() => {
+                    particle.remove();
+                }, duration * 1000);
+            }
+            
+            // Tambahkan style untuk animasi partikel
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes particle-move {
+                    0% {
+                        transform: translate(0, 0) scale(1);
+                    }
+                    100% {
+                        transform: translate(calc(var(--end-x) - ${centerX}px), calc(var(--end-y) - ${centerY}px)) scale(0);
+                    }
+                }
+                
+                @keyframes particle-fade {
+                    0% {
+                        opacity: 1;
+                    }
+                    100% {
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Hapus style setelah selesai
+            setTimeout(() => {
+                style.remove();
+            }, 1500);
+        }
+        
+        // Play explosion sound
+        function playExplosionSound() {
+            try {
+                explosionSound.currentTime = 0;
+                explosionSound.play();
+            } catch (e) {
+                console.log("Gagal memainkan suara ledakan:", e);
+            }
         }
         
         // Update winners list table
@@ -1012,7 +1245,7 @@
             try {
                 // Prepare worksheet
                 const wsData = [
-                    ['No', 'NIK', 'Nama', 'Mendapat hadiah'],
+                    ['No', 'NIK', 'Nama', 'Jenis Hadiah'],
                     ...appState.winners.map((winner, index) => [
                         index + 1,
                         winner.nik.toString().padStart(6, '0'),
