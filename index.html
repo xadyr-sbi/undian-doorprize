@@ -786,18 +786,6 @@
             pointer-events: none;
             z-index: 150;
         }
-        
-        .animation-info {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            z-index: 200;
-        }
     </style>
 </head>
 <body>
@@ -805,7 +793,6 @@
     <div class="flag-ribbon right"></div>
     
     <div class="confetti-container" id="confetti-container"></div>
-    <div class="animation-info" id="animation-info">Animasi: Explosion</div>
     
     <div class="container">
         <div class="header">
@@ -900,7 +887,8 @@
             prizes: [],
             winners: [],
             isRunning: false,
-            currentPrizeIndex: 0
+            currentPrizeIndex: 0,
+            currentDisplayedEmployee: null
         };
 
         function loadAppState() {
@@ -933,7 +921,6 @@
         const applauseSound = document.getElementById('applause-sound');
         const explosionSound = document.getElementById('explosion-sound');
         const participantCount = document.getElementById('participant-count');
-        const animationInfo = document.getElementById('animation-info');
         
         // Event listeners
         uploadArea.addEventListener('click', () => fileInput.click());
@@ -1037,6 +1024,9 @@
                 const randomIndex = Math.floor(Math.random() * appState.employees.length);
                 const employee = appState.employees[randomIndex];
                 
+                // Simpan karyawan yang sedang ditampilkan
+                appState.currentDisplayedEmployee = employee;
+                
                 nikNumber.textContent = employee.nik.toString().padStart(6, '0');
                 nikName.textContent = employee.name;
             }, 17);
@@ -1050,8 +1040,14 @@
             stopBtn.style.display = 'none';
             startBtn.style.display = 'flex';
             
-            const randomIndex = Math.floor(Math.random() * appState.employees.length);
-            const winner = appState.employees[randomIndex];
+            // Gunakan karyawan yang sedang ditampilkan saat stop
+            const winner = appState.currentDisplayedEmployee;
+            
+            // Periksa apakah masih ada karyawan yang tersedia
+            if (!winner) {
+                alert('Tidak ada peserta yang tersedia!');
+                return;
+            }
             
             nikNumber.textContent = winner.nik.toString().padStart(6, '0');
             nikName.textContent = winner.name;
@@ -1066,16 +1062,26 @@
             };
             
             appState.winners.push(winnerData);
+            
+            // Hapus pemenang dari daftar peserta agar tidak terpilih lagi
+            const winnerIndex = appState.employees.findIndex(emp => 
+                emp.nik === winner.nik && emp.name === winner.name
+            );
+            
+            if (winnerIndex !== -1) {
+                appState.employees.splice(winnerIndex, 1);
+            }
+            
             appState.currentPrizeIndex++;
             
             updateWinnersList();
             updateNextPrizeInfo();
+            updateParticipantCount();
             saveAppState();
             
             // Pilih animasi secara acak
             const animationTypes = ['explosion', 'shake', 'bounce', 'spin'];
             const selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
-            animationInfo.textContent = `Animasi: ${selectedAnimation.charAt(0).toUpperCase() + selectedAnimation.slice(1)}`;
             
             applyRandomAnimation(selectedAnimation);
             createConfetti();
@@ -1252,6 +1258,7 @@
                 appState.prizes = [];
                 appState.winners = [];
                 appState.currentPrizeIndex = 0;
+                appState.currentDisplayedEmployee = null;
                 
                 nikNumber.textContent = '000000';
                 nikName.textContent = 'Nama Karyawan';
