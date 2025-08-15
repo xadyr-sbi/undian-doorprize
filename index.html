@@ -69,7 +69,7 @@
         
         .container {
             width: 100%;
-            max-width: 1400px; /* Lebih lebar untuk layar besar */
+            max-width: 1400px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
@@ -87,7 +87,6 @@
             padding: 0 10px;
         }
         
-        /* PERUBAHAN: Judul disusun berurutan ke bawah */
         .header h1 {
             font-size: 3.5rem;
             color: #c62828;
@@ -282,7 +281,47 @@
             }
         }
         
-        /* PERUBAHAN: Animasi menjadi 2.5 detik */
+        /* Variasi Animasi Baru */
+        /* Animasi Shake (Bergetar) */
+        @keyframes nikShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        
+        @keyframes nameShake {
+            0%, 100% { transform: translateX(0) scale(1); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) scale(1.05); }
+            20%, 40%, 60%, 80% { transform: translateX(5px) scale(1.05); }
+        }
+        
+        /* Animasi Bounce (Memantul) */
+        @keyframes nikBounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0); }
+            40% {transform: translateY(-30px); }
+            60% {transform: translateY(-15px); }
+        }
+        
+        @keyframes nameBounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0) scale(1); }
+            40% {transform: translateY(-15px) scale(1.1); }
+            60% {transform: translateY(-7px) scale(1.1); }
+        }
+        
+        /* Animasi Spin (Berputar) */
+        @keyframes nikSpin {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(360deg); }
+            100% { transform: scale(1) rotate(720deg); }
+        }
+        
+        @keyframes nameSpin {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(360deg); }
+            100% { transform: scale(1) rotate(720deg); }
+        }
+        
+        /* Kelas untuk animasi */
         .explosion-effect {
             animation: explosion 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
@@ -293,6 +332,30 @@
         
         .name-explosion {
             animation: nameExplosion 2.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+        
+        .nik-shake {
+            animation: nikShake 1s ease-in-out;
+        }
+        
+        .name-shake {
+            animation: nameShake 1s ease-in-out;
+        }
+        
+        .nik-bounce {
+            animation: nikBounce 1s ease;
+        }
+        
+        .name-bounce {
+            animation: nameBounce 1s ease;
+        }
+        
+        .nik-spin {
+            animation: nikSpin 1.5s ease-out;
+        }
+        
+        .name-spin {
+            animation: nameSpin 1.5s ease-out;
         }
         
         .controls {
@@ -359,7 +422,13 @@
             align-items: center;
             justify-content: center;
             min-height: 80px;
-            z-index: 20;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            line-height: 1.3;
+            white-space: normal;
+            text-overflow: unset;
+            overflow: auto;
+            transition: transform 0.3s;
         }
         
         .upload-area:hover {
@@ -517,7 +586,6 @@
             max-width: 90%;
         }
         
-        /* TAMBAHAN: Scrollbar untuk nama panjang */
         .nik-name::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -533,7 +601,6 @@
             border-radius: 10px;
         }
         
-        /* Responsivitas untuk layar sangat lebar */
         @media (min-width: 1600px) {
             .container {
                 max-width: 1600px;
@@ -659,7 +726,6 @@
             }
         }
         
-        /* Efek bunga-bunga jatuh (confetti) */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -686,14 +752,12 @@
             }
         }
         
-        /* Audio control tersembunyi */
         #applause-sound {
             position: absolute;
             opacity: 0;
             pointer-events: none;
         }
         
-        /* Efek kembang api */
         .firework {
             position: absolute;
             width: 5px;
@@ -714,7 +778,6 @@
             }
         }
         
-        /* Particle effects for explosion */
         .explosion-particle {
             position: absolute;
             width: 10px;
@@ -723,14 +786,26 @@
             pointer-events: none;
             z-index: 150;
         }
+        
+        .animation-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 200;
+        }
     </style>
 </head>
 <body>
-    <!-- Pita Bendera Indonesia -->
     <div class="flag-ribbon left"></div>
     <div class="flag-ribbon right"></div>
     
     <div class="confetti-container" id="confetti-container"></div>
+    <div class="animation-info" id="animation-info">Animasi: Explosion</div>
     
     <div class="container">
         <div class="header">
@@ -812,7 +887,6 @@
         </div>
     </div>
 
-    <!-- Audio untuk efek tepuk tangan dan ledakan -->
     <audio id="applause-sound" preload="auto">
         <source src="https://assets.mixkit.co/sfx/preview/mixkit-audience-clapping-loudly-438.mp3" type="audio/mpeg">
     </audio>
@@ -821,7 +895,6 @@
     </audio>
 
     <script>
-        // Data aplikasi yang akan disimpan
         const appState = {
             employees: [],
             prizes: [],
@@ -830,20 +903,16 @@
             currentPrizeIndex: 0
         };
 
-        // Memuat state dari localStorage
         function loadAppState() {
             const savedState = localStorage.getItem('doorprizeAppState');
             if (savedState) {
                 const parsedState = JSON.parse(savedState);
                 Object.assign(appState, parsedState);
-                console.log("State aplikasi berhasil dimuat:", appState);
             }
         }
 
-        // Menyimpan state ke localStorage
         function saveAppState() {
             localStorage.setItem('doorprizeAppState', JSON.stringify(appState));
-            console.log("State aplikasi berhasil disimpan:", appState);
         }
 
         // DOM Elements
@@ -864,12 +933,10 @@
         const applauseSound = document.getElementById('applause-sound');
         const explosionSound = document.getElementById('explosion-sound');
         const participantCount = document.getElementById('participant-count');
+        const animationInfo = document.getElementById('animation-info');
         
         // Event listeners
-        uploadArea.addEventListener('click', function() {
-            fileInput.click();
-        });
-        
+        uploadArea.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileUpload);
         startBtn.addEventListener('click', startDraw);
         stopBtn.addEventListener('click', stopDraw);
@@ -879,32 +946,23 @@
         // Initialize
         initializeApp();
         
-        // Inisialisasi aplikasi
         function initializeApp() {
-            // Memuat state dari localStorage
             loadAppState();
-            
-            // Memulihkan tampilan berdasarkan state
             updateParticipantCount();
             updateWinnersList();
             updateNextPrizeInfo();
             
-            // Memulihkan status tombol
             if (appState.isRunning) {
                 startBtn.style.display = 'none';
                 stopBtn.style.display = 'flex';
                 startDraw();
             }
-            
-            console.log("Aplikasi diinisialisasi dengan state:", appState);
         }
         
-        // File upload handler
         function handleFileUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
             
-            // Show progress bar
             progressContainer.style.display = 'block';
             progressBar.style.width = '30%';
             
@@ -914,36 +972,25 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
-                    
-                    // Get first worksheet
                     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    
-                    // Convert to JSON - kolom A: NIK, B: Nama, C: Jenis Hadiah
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: ['nik', 'name', 'prize']});
                     
-                    // Remove header row if exists
                     if (jsonData.length > 0 && isNaN(jsonData[0].nik)) {
                         jsonData.shift();
                     }
                     
-                    // Update state
                     appState.employees = jsonData;
                     appState.prizes = jsonData.map(item => item.prize || "Hadiah Khusus");
                     appState.currentPrizeIndex = appState.winners.length;
                     
-                    // Update progress bar
                     progressBar.style.width = '100%';
                     
                     setTimeout(() => {
                         progressContainer.style.display = 'none';
                         progressBar.style.width = '0%';
                         alert(`Sukses! ${appState.employees.length} data karyawan dan hadiah telah dimuat.`);
-                        
-                        // Perbarui tampilan
                         updateParticipantCount();
                         updateNextPrizeInfo();
-                        
-                        // Simpan state
                         saveAppState();
                     }, 500);
                     
@@ -964,7 +1011,6 @@
             reader.readAsArrayBuffer(file);
         }
         
-        // Update info hadiah berikutnya
         function updateNextPrizeInfo() {
             if (appState.prizes.length > appState.currentPrizeIndex) {
                 prizeInfo.textContent = `Hadiah Berikutnya: ${appState.prizes[appState.currentPrizeIndex]}`;
@@ -973,7 +1019,6 @@
             }
         }
         
-        // Start the draw (3x faster)
         function startDraw() {
             if (appState.employees.length === 0) {
                 alert('Silakan upload data karyawan terlebih dahulu!');
@@ -985,8 +1030,6 @@
             appState.isRunning = true;
             startBtn.style.display = 'none';
             stopBtn.style.display = 'flex';
-            
-            // Simpan state
             saveAppState();
             
             // Start animation (3x faster - interval 17ms ~ 60fps)
@@ -999,7 +1042,6 @@
             }, 17);
         }
         
-        // Stop the draw and pick winner
         function stopDraw() {
             if (!appState.isRunning) return;
             
@@ -1008,18 +1050,15 @@
             stopBtn.style.display = 'none';
             startBtn.style.display = 'flex';
             
-            // Get final employee
             const randomIndex = Math.floor(Math.random() * appState.employees.length);
             const winner = appState.employees[randomIndex];
             
             nikNumber.textContent = winner.nik.toString().padStart(6, '0');
             nikName.textContent = winner.name;
             
-            // Dapatkan hadiah dari urutan berikutnya
             const prize = appState.prizes.length > appState.currentPrizeIndex ? 
                           appState.prizes[appState.currentPrizeIndex] : "Hadiah Khusus";
             
-            // Tambahkan pemenang ke daftar
             const winnerData = {
                 nik: winner.nik,
                 name: winner.name,
@@ -1029,81 +1068,86 @@
             appState.winners.push(winnerData);
             appState.currentPrizeIndex++;
             
-            // Perbarui tampilan
             updateWinnersList();
             updateNextPrizeInfo();
-            
-            // Simpan state
             saveAppState();
             
-            // Create confetti effect
+            // Pilih animasi secara acak
+            const animationTypes = ['explosion', 'shake', 'bounce', 'spin'];
+            const selectedAnimation = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+            animationInfo.textContent = `Animasi: ${selectedAnimation.charAt(0).toUpperCase() + selectedAnimation.slice(1)}`;
+            
+            applyRandomAnimation(selectedAnimation);
             createConfetti();
-            
-            // Create explosion effect
             createExplosionEffect();
-            
-            // Mainkan suara tepuk tangan dan ledakan
             playApplause();
             playExplosionSound();
         }
         
-        // Create explosion effect
-        function createExplosionEffect() {
-            // Hapus efek sebelumnya
+        function applyRandomAnimation(type) {
+            // Hapus semua kelas animasi sebelumnya
             nikDisplay.classList.remove('explosion-effect');
-            nikNumber.classList.remove('nik-explosion');
-            nikName.classList.remove('name-explosion');
+            nikNumber.classList.remove('nik-explosion', 'nik-shake', 'nik-bounce', 'nik-spin');
+            nikName.classList.remove('name-explosion', 'name-shake', 'name-bounce', 'name-spin');
             
-            // Paksa reflow untuk memastikan animasi dimulai ulang
+            // Beri waktu untuk reflow
             void nikDisplay.offsetWidth;
             void nikNumber.offsetWidth;
             void nikName.offsetWidth;
             
-            // Tambahkan efek ledakan
-            nikDisplay.classList.add('explosion-effect');
-            nikNumber.classList.add('nik-explosion');
-            nikName.classList.add('name-explosion');
-            
-            // Tambahkan partikel ledakan
-            createExplosionParticles();
+            // Terapkan animasi yang dipilih
+            switch(type) {
+                case 'explosion':
+                    nikDisplay.classList.add('explosion-effect');
+                    nikNumber.classList.add('nik-explosion');
+                    nikName.classList.add('name-explosion');
+                    break;
+                case 'shake':
+                    nikNumber.classList.add('nik-shake');
+                    nikName.classList.add('name-shake');
+                    break;
+                case 'bounce':
+                    nikNumber.classList.add('nik-bounce');
+                    nikName.classList.add('name-bounce');
+                    break;
+                case 'spin':
+                    nikNumber.classList.add('nik-spin');
+                    nikName.classList.add('name-spin');
+                    break;
+            }
             
             // Hapus kelas animasi setelah selesai
-            // PERUBAHAN: Animasi menjadi 2.5 detik (2500ms)
             setTimeout(() => {
                 nikDisplay.classList.remove('explosion-effect');
-                nikNumber.classList.remove('nik-explosion');
-                nikName.classList.remove('name-explosion');
+                nikNumber.classList.remove('nik-explosion', 'nik-shake', 'nik-bounce', 'nik-spin');
+                nikName.classList.remove('name-explosion', 'name-shake', 'name-bounce', 'name-spin');
             }, 2500);
         }
         
-        // Create explosion particles
+        function createExplosionEffect() {
+            createExplosionParticles();
+        }
+        
         function createExplosionParticles() {
             const colors = ['#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#ff00ff'];
-            
-            // Dapatkan posisi dan dimensi kotak NIK
             const displayRect = nikDisplay.getBoundingClientRect();
             const centerX = displayRect.left + displayRect.width / 2;
             const centerY = displayRect.top + displayRect.height / 2;
             
-            // Buat 100 partikel ledakan
             for (let i = 0; i < 100; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'explosion-particle';
                 
-                // Warna acak
                 const colorIndex = Math.floor(Math.random() * colors.length);
                 particle.style.backgroundColor = colors[colorIndex];
                 
-                // Ukuran acak
                 const size = Math.random() * 15 + 5;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
-                // Posisi awal di tengah kotak NIK
                 particle.style.left = `${centerX}px`;
                 particle.style.top = `${centerY}px`;
                 
-                // Animasi partikel
                 const angle = Math.random() * Math.PI * 2;
                 const distance = Math.random() * 200 + 100;
                 const duration = Math.random() * 1 + 0.5;
@@ -1118,13 +1162,11 @@
                 
                 document.body.appendChild(particle);
                 
-                // Hapus partikel setelah animasi selesai
                 setTimeout(() => {
                     particle.remove();
                 }, duration * 1000);
             }
             
-            // Tambahkan style untuk animasi partikel
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes particle-move {
@@ -1147,13 +1189,11 @@
             `;
             document.head.appendChild(style);
             
-            // Hapus style setelah selesai
             setTimeout(() => {
                 style.remove();
             }, 1500);
         }
         
-        // Play explosion sound
         function playExplosionSound() {
             try {
                 explosionSound.currentTime = 0;
@@ -1163,7 +1203,6 @@
             }
         }
         
-        // Update winners list table
         function updateWinnersList() {
             winnersList.innerHTML = '';
             
@@ -1196,15 +1235,12 @@
             });
         }
         
-        // Update participant count
         function updateParticipantCount() {
             participantCount.innerHTML = `<i class="fas fa-users"></i> Peserta: ${appState.employees.length}`;
         }
         
-        // Fungsi untuk menghapus semua data
         function clearAllData() {
             if (confirm('Apakah Anda yakin ingin menghapus SEMUA DATA? Data pemenang dan data karyawan yang diunggah akan direset.')) {
-                // Hentikan interval jika sedang berjalan
                 if (appState.isRunning) {
                     clearInterval(drawInterval);
                     appState.isRunning = false;
@@ -1212,30 +1248,22 @@
                     startBtn.style.display = 'flex';
                 }
                 
-                // Reset state aplikasi
                 appState.employees = [];
                 appState.prizes = [];
                 appState.winners = [];
                 appState.currentPrizeIndex = 0;
                 
-                // Reset tampilan
                 nikNumber.textContent = '000000';
                 nikName.textContent = 'Nama Karyawan';
                 prizeInfo.textContent = 'Hadiah: -';
                 participantCount.innerHTML = '<i class="fas fa-users"></i> Peserta: 0';
                 winnersList.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada pemenang</td></tr>';
-                
-                // Reset file input
                 fileInput.value = '';
-                
-                // Simpan state kosong
                 saveAppState();
-                
                 alert('Semua data telah dihapus!');
             }
         }
         
-        // Export winners to Excel
         function exportWinnersToExcel() {
             if (appState.winners.length === 0) {
                 alert('Belum ada pemenang untuk di-export!');
@@ -1243,7 +1271,6 @@
             }
             
             try {
-                // Prepare worksheet
                 const wsData = [
                     ['No', 'NIK', 'Nama', 'Jenis Hadiah'],
                     ...appState.winners.map((winner, index) => [
@@ -1255,28 +1282,11 @@
                 ];
                 
                 const ws = XLSX.utils.aoa_to_sheet(wsData);
-                
-                // Style header
-                if (!ws['A1']) ws['A1'] = {};
-                if (!ws['B1']) ws['B1'] = {};
-                if (!ws['C1']) ws['C1'] = {};
-                if (!ws['D1']) ws['D1'] = {};
-                
-                ws['A1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
-                ws['B1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
-                ws['C1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
-                ws['D1'].s = { font: { bold: true }, fill: { fgColor: { rgb: "FFD700" } } };
-                
-                // Create workbook
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Pemenang Doorprize");
-                
-                // Export to file
                 const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
                 const fileName = `Daftar_Pemenang_${dateStr}.xlsx`;
-                
                 XLSX.writeFile(wb, fileName);
-                
                 alert(`File ${fileName} berhasil disimpan!`);
                 
             } catch (error) {
@@ -1285,40 +1295,24 @@
             }
         }
         
-        // Create confetti effect
         function createConfetti() {
-            // Hapus confetti sebelumnya
             confettiContainer.innerHTML = '';
-            
-            // Warna-warni confetti
             const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff9900', '#00ccff'];
             
-            // Buat 250 confetti
             for (let i = 0; i < 250; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                
-                // Posisi acak di bagian atas layar
                 const posX = Math.random() * window.innerWidth;
                 confetti.style.left = `${posX}px`;
-                
-                // Warna acak
                 const colorIndex = Math.floor(Math.random() * colors.length);
                 confetti.style.backgroundColor = colors[colorIndex];
-                
-                // Ukuran acak
                 const size = Math.random() * 10 + 5;
                 confetti.style.width = `${size}px`;
                 confetti.style.height = `${size}px`;
-                
-                // Durasi animasi acak
                 const duration = Math.random() * 3 + 2;
                 confetti.style.animation = `fall ${duration}s linear forwards`;
-                
-                // Tambahkan confetti ke container
                 confettiContainer.appendChild(confetti);
                 
-                // Hapus confetti setelah animasi selesai
                 setTimeout(() => {
                     if (confetti.parentNode) {
                         confetti.remove();
@@ -1326,32 +1320,22 @@
                 }, duration * 1000);
             }
             
-            // Tambahkan efek kembang api
             createFireworks();
         }
         
-        // Create fireworks effect
         function createFireworks() {
-            // Buat 10 efek kembang api
             for (let i = 0; i < 10; i++) {
                 setTimeout(() => {
                     const firework = document.createElement('div');
                     firework.className = 'firework';
-                    
-                    // Posisi acak di sekitar area NIK
                     const posX = Math.random() * window.innerWidth;
                     firework.style.left = `${posX}px`;
                     firework.style.top = `${window.innerHeight * 0.3}px`;
-                    
-                    // Warna acak
                     const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
                     const colorIndex = Math.floor(Math.random() * colors.length);
                     firework.style.backgroundColor = colors[colorIndex];
-                    
-                    // Tambahkan ke container
                     confettiContainer.appendChild(firework);
                     
-                    // Hapus setelah animasi selesai
                     setTimeout(() => {
                         if (firework.parentNode) {
                             firework.remove();
@@ -1361,10 +1345,9 @@
             }
         }
         
-        // Play applause sound
         function playApplause() {
             try {
-                applauseSound.currentTime = 0; // Reset audio ke awal
+                applauseSound.currentTime = 0;
                 applauseSound.play();
             } catch (e) {
                 console.log("Gagal memainkan suara tepuk tangan:", e);
