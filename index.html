@@ -392,14 +392,17 @@
             display: none;
         }
         
+        /* Perubahan untuk upload area */
         .upload-section {
-            width: 90%;
+            width: 50%; /* Diubah dari 90% menjadi 50% */
+            max-width: 700px; /* Batasi lebar maksimum */
             background: #f5f5f5;
             border-radius: 15px;
             padding: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
             z-index: 20;
+            margin: 0 auto; /* Pusatkan secara horizontal */
         }
         
         .upload-title {
@@ -659,6 +662,11 @@
                 width: 80px;
                 height: 80px;
             }
+            
+            /* Di mobile, upload area kembali ke 90% */
+            .upload-section {
+                width: 90%;
+            }
         }
         
         @media (max-width: 480px) {
@@ -891,6 +899,9 @@
             currentDisplayedEmployee: null
         };
 
+        // Variabel untuk menyimpan animasi frame
+        let animationFrameId = null;
+
         function loadAppState() {
             const savedState = localStorage.getItem('doorprizeAppState');
             if (savedState) {
@@ -1019,23 +1030,36 @@
             stopBtn.style.display = 'flex';
             saveAppState();
             
-            // Start animation (3x faster - interval 17ms ~ 60fps)
-            drawInterval = setInterval(() => {
-                const randomIndex = Math.floor(Math.random() * appState.employees.length);
-                const employee = appState.employees[randomIndex];
+            // Menggunakan requestAnimationFrame untuk animasi yang lebih halus
+            let lastTime = 0;
+            const frameInterval = 17; // ~60fps
+            
+            const drawFrame = (timestamp) => {
+                if (!appState.isRunning) return;
                 
-                // Simpan karyawan yang sedang ditampilkan
-                appState.currentDisplayedEmployee = employee;
+                if (timestamp - lastTime > frameInterval) {
+                    lastTime = timestamp;
+                    
+                    const randomIndex = Math.floor(Math.random() * appState.employees.length);
+                    const employee = appState.employees[randomIndex];
+                    
+                    appState.currentDisplayedEmployee = employee;
+                    
+                    nikNumber.textContent = employee.nik.toString().padStart(6, '0');
+                    nikName.textContent = employee.name;
+                }
                 
-                nikNumber.textContent = employee.nik.toString().padStart(6, '0');
-                nikName.textContent = employee.name;
-            }, 17);
+                animationFrameId = requestAnimationFrame(drawFrame);
+            };
+            
+            animationFrameId = requestAnimationFrame(drawFrame);
         }
         
         function stopDraw() {
             if (!appState.isRunning) return;
             
-            clearInterval(drawInterval);
+            // Hentikan animasi dengan pasti
+            cancelAnimationFrame(animationFrameId);
             appState.isRunning = false;
             stopBtn.style.display = 'none';
             startBtn.style.display = 'flex';
@@ -1248,7 +1272,7 @@
         function clearAllData() {
             if (confirm('Apakah Anda yakin ingin menghapus SEMUA DATA? Data pemenang dan data karyawan yang diunggah akan direset.')) {
                 if (appState.isRunning) {
-                    clearInterval(drawInterval);
+                    cancelAnimationFrame(animationFrameId);
                     appState.isRunning = false;
                     stopBtn.style.display = 'none';
                     startBtn.style.display = 'flex';
